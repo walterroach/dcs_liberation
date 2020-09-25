@@ -1,0 +1,5 @@
+# this is a list of lua scripts that will be injected in the mission, in the same order
+# JTACAutoLase is an empty file, only there to disable loading the official script (already included in CTLD)
+JTACAutoLase.lua
+mist.lua
+dynamically-load-framework.lua
