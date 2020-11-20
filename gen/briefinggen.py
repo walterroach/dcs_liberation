@@ -6,11 +6,15 @@ import os
 import random
 import logging
 from dataclasses import dataclass
+
+from jinja2.environment import Template
 from theater import FrontLine
 from typing import List, Dict, TYPE_CHECKING
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from dcs.mission import Mission
+
+from game.translation import Translation
 from .aircraft import FlightData
 from .airsupportgen import AwacsInfo, TankerInfo
 from .armor import JtacInfo
@@ -134,7 +138,7 @@ class BriefingGenerator(MissionInfoGenerator):
             trim_blocks=True,
             lstrip_blocks=True,
             )
-        self.template = env.get_template("briefingtemplate_EN.j2")
+        self.template: Template = Translation.load_template(env, "briefingtemplate")
 
     def generate(self) -> None:
         """Generate the mission briefing
