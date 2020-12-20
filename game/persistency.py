@@ -6,11 +6,14 @@ from typing import Optional
 
 _dcs_saved_game_folder: Optional[str] = None
 _file_abs_path = None
+_remote_save_url: Optional[str] = None
 
 
-def setup(user_folder: str):
+def setup(user_folder: str, remote_save_url: str = ""):
     global _dcs_saved_game_folder
+    global _remote_save_url
     _dcs_saved_game_folder = user_folder
+    _remote_save_url = remote_save_url
     _file_abs_path = os.path.join(base_path(), "default.liberation")
 
 
@@ -68,3 +71,5 @@ def autosave(game) -> bool:
         logging.exception("Could not save game")
         return False
 
+def remote_save_url() -> str:
+    return _remote_save_url

@@ -17,6 +17,7 @@ def init():
     global __dcs_saved_game_directory
     global __dcs_installation_directory
     global __last_save_file
+    global __remote_save_url
 
     if os.path.isfile(PREFERENCES_FILE_PATH):
         try:
@@ -24,6 +25,7 @@ def init():
                 pref_data = json.loads(prefs.read())
                 __dcs_saved_game_directory = pref_data["saved_game_dir"]
                 __dcs_installation_directory = pref_data["dcs_install_dir"]
+                __remote_save_url = pref_data["remote_save_url"]
                 if "last_save_file" in pref_data:
                     __last_save_file = pref_data["last_save_file"]
                 else:
@@ -33,9 +35,11 @@ def init():
             __dcs_saved_game_directory = ""
             __dcs_installation_directory = ""
             __last_save_file = ""
+            __remote_save_url = ""
             is_first_start = True
     else:
         __last_save_file = ""
+        __remote_save_url = ""
         try:
             __dcs_saved_game_directory = dcs.installation.get_dcs_saved_games_directory()
             if os.path.exists(__dcs_saved_game_directory + ".openbeta"):
@@ -48,16 +52,18 @@ def init():
             __dcs_installation_directory = ""
 
         is_first_start = True
-    persistency.setup(__dcs_saved_game_directory)
+    persistency.setup(__dcs_saved_game_directory, __remote_save_url)
     return is_first_start
 
 
-def setup(saved_game_dir, install_dir):
+def setup(saved_game_dir, install_dir, remote_save_url=""):
     global __dcs_saved_game_directory
     global __dcs_installation_directory
+    global __remote_save_url
     __dcs_saved_game_directory = saved_game_dir
     __dcs_installation_directory = install_dir
-    persistency.setup(__dcs_saved_game_directory)
+    __remote_save_url = remote_save_url
+    persistency.setup(__dcs_saved_game_directory, __remote_save_url)
 
 
 def setup_last_save_file(last_save_file):
@@ -69,9 +75,11 @@ def save_config():
     global __dcs_saved_game_directory
     global __dcs_installation_directory
     global __last_save_file
+    global __remote_save_url
     pref_data = {"saved_game_dir": __dcs_saved_game_directory,
                  "dcs_install_dir": __dcs_installation_directory,
-                 "last_save_file": __last_save_file}
+                 "last_save_file": __last_save_file,
+                 "remote_save_url": __remote_save_url}
     with(open(PREFERENCES_FILE_PATH, "w")) as prefs:
         prefs.write(json.dumps(pref_data))
 

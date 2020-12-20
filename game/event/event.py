@@ -13,6 +13,7 @@ from game.debriefing import AirLosses, Debriefing
 from game.infos.information import Information
 from game.operation.operation import Operation
 from game.theater import ControlPoint
+from game.client.tauntaun import Tauntaun
 from gen import AirTaskingOrder
 from gen.ground_forces.combat_stance import CombatStance
 from ..unitmap import UnitMap
@@ -63,8 +64,12 @@ class Event:
     def generate(self) -> UnitMap:
         Operation.prepare(self.game)
         unit_map = Operation.generate()
-        Operation.current_mission.save(
-            persistency.mission_path_for("liberation_nextturn.miz"))
+        file_path = persistency.mission_path_for("liberation_nextturn.miz")
+        Operation.current_mission.save(file_path)
+        if self.game.settings.save_to_remote:
+            web_client = Tauntaun()
+            web_client.post_miz(file_path)
+            logging.info(f"Posted {file_path} to Tauntaun")
         return unit_map
 
     @staticmethod

@@ -51,6 +51,8 @@ class Settings:
 
     never_delay_player_flights: bool = False
 
+    save_to_remote: bool = False
+
     @staticmethod
     def plugin_settings_key(identifier: str) -> str:
         return f"plugins.{identifier}"

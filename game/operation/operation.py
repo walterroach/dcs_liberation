@@ -1,8 +1,8 @@
 from __future__ import annotations
-from game.theater.theatergroundobject import TheaterGroundObject
 
 import logging
 import os
+import requests
 from pathlib import Path
 from typing import TYPE_CHECKING, Iterable, List, Optional, Set
 
@@ -15,6 +15,7 @@ from dcs.mapping import Point
 from dcs.translation import String
 from dcs.triggers import TriggerStart
 from game.plugins import LuaPluginManager
+from game.theater.theatergroundobject import TheaterGroundObject
 from gen import Conflict, FlightType, VisualGenerator
 from gen.aircraft import AIRCRAFT_DATA, AircraftConflictGenerator, FlightData
 from gen.airfields import AIRFIELD_DATA

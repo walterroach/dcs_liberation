@@ -315,6 +315,15 @@ class QSettingsWindow(QDialog):
             "When checked, player flights with a delayed start time will be "
             "spawned immediately. AI wingmen may begin startup immediately."
         )
+        
+        self.remote_save = QCheckBox()
+        self.remote_save.setChecked(
+            self.game.settings.save_to_remote)
+        self.remote_save.toggled.connect(self.applySettings)
+        self.remote_save.setToolTip(
+            "EXPERIMENTAL FEATURE.  When checked, a copy of the next turn mission "
+            "will be posted to the remote_url specified in your preferences file."
+        )
 
         self.gameplayLayout.addWidget(QLabel("Use Supercarrier Module"), 0, 0)
         self.gameplayLayout.addWidget(self.supercarrier, 0, 1, Qt.AlignRight)
@@ -324,7 +333,11 @@ class QSettingsWindow(QDialog):
             QLabel("Never delay player flights"), 2, 0)
         self.gameplayLayout.addWidget(self.never_delay_players, 2, 1,
                                       Qt.AlignRight)
-
+        self.gameplayLayout.addWidget(
+            QLabel("EXPERIMENTAL: Save to Remote")
+        )
+        self.gameplayLayout.addWidget(self.remote_save, 3, 1,
+                                      Qt.AlignRight)
         self.performance = QGroupBox("Performance")
         self.performanceLayout = QGridLayout()
         self.performanceLayout.setAlignment(Qt.AlignTop)
@@ -451,6 +464,7 @@ class QSettingsWindow(QDialog):
         self.game.settings.external_views_allowed = self.ext_views.isChecked()
         self.game.settings.generate_marks = self.generate_marks.isChecked()
         self.game.settings.never_delay_player_flights = self.never_delay_players.isChecked()
+        self.game.settings.save_to_remote = self.remote_save.isChecked()
 
         self.game.settings.supercarrier = self.supercarrier.isChecked()
 
